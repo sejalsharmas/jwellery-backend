@@ -1,7 +1,9 @@
 import express from 'express';
+import cors from 'cors'
 
 const app = express();
 app.use(express.json())
+app.use(cors());
 
 const PORT = 5001;
 
@@ -86,7 +88,7 @@ const JEWELLERY =[
     {
         id:8,
         name:"Earcuffs",
-        type:"Prettiest in Pink Diamond Ear Cuffs",
+        type:" Pink Diamond Ear Cuffs",
         Metalused:"Pure Gold",
         Weight:"22K",
         Color:"Yellow Gold",
@@ -132,6 +134,7 @@ app.get('/jewelries',(req,res)=>{
         data: JEWELLERY
      })
 })
+
 //ADD jewelrie
 app.post('/jewelries',(req,res)=>{
     const {id , name, type, Metalused ,Weight, Color, Price, Status , image} = req.body;
@@ -156,7 +159,7 @@ app.post('/jewelries',(req,res)=>{
     
     JEWELLERY.push(jewelery);
 
-    res.json({
+    res.status(201).json({
         success: true,
         message: 'Jewelery added successfully',
         data: jewelery
@@ -177,7 +180,7 @@ app.delete('/jewelries/:id',(req, res)=>{
 
 
     if (jewelrieIndex == -1) {
-        return res.json({
+        return res.status(404).json({
             success: "false",
             message: "Jewelrie not found"
         });
@@ -210,7 +213,7 @@ app.put('/jewelries/:id',(req, res)=>{
 
     
     if (jewelrieIndex == -1) {
-        return res.json({
+        return res.status(404).json({
             success: "false",
             message: "Jewelrie not found"
         });
@@ -232,6 +235,36 @@ app.put('/jewelries/:id',(req, res)=>{
     res.json({
         success: "true",
         message: "Jewelrie updated successfully",
+        data: jewelrie
+    })
+
+})
+ 
+// reading specific jwellery
+app.get('/jewelries/:id',(req, res)=>{
+    const {id} = req.params;
+    let jewelrieIndex = -1
+
+    JEWELLERY.map((jewelrie, index) => {
+        if (jewelrie.id == id) {
+            jewelrieIndex = index;
+        }
+    });
+
+    
+    if (jewelrieIndex == -1) {
+        return res.status(404).json({
+            success: "false",
+            message: "Jewelrie not found"
+        });
+    }
+
+    const jewelrie = JEWELLERY[jewelrieIndex]
+
+    
+    res.json({
+        success: "true",
+        message: "Jewelrie details fetched successfully",
         data: jewelrie
     })
 
