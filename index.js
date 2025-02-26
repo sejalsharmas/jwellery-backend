@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
-import { getHealth} from "./controllers/Health.js";
+
 import { getNotFound } from './controllers/others.js';
 import { getJewelries ,
     putJewelries,
@@ -10,6 +10,7 @@ import { getJewelries ,
     deleteJewelriesById,
     getJewelriesById
  } from './controllers/jewelries.js';
+import { getHealth } from './controllers/Health.js';
 
 
 const app = express();
@@ -22,7 +23,7 @@ app.use(cors());
 
 
 
-app.get('/health', getHealth)
+app.get('/health', getHealth )
 //fetch data
 app.get('/jewelries',getJewelries)
 //ADD jewelrie

@@ -1,4 +1,3 @@
-
 const getHealth = (req, res) => {
     res.json({
         success: true,
@@ -6,8 +5,6 @@ const getHealth = (req, res) => {
     })
 };
 
-
-
-export {
-    getHealth 
+export{
+    getHealth    
 }
