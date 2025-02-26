@@ -1,3 +1,4 @@
+
 const getHealth = (req, res) => {
     res.json({
         success: true,
@@ -5,15 +6,8 @@ const getHealth = (req, res) => {
     })
 };
 
-const getNotFound = (req,res)=>{
-    res.status(404).json({
-        success: false,
-        message: 'API not found'
-    })
 
-}
 
 export {
-    getHealth ,
-    getNotFound
+    getHealth 
 }
