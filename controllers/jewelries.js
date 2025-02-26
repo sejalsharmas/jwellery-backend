@@ -1,4 +1,4 @@
-import { JEWELLERY } from "../controllers/data.js";
+import { JEWELLERY } from "../data/data.js";
 const getJewelries = (req,res)=>{
     res.json({
        success: true,
