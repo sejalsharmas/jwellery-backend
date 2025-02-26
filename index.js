@@ -2,6 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
+import { getHealth, getNotFound } from "./controllers/Health.js";
+import { getJewelries } from './controllers/jewelries.js';
+import { postJewelries } from './controllers/postJewelries.js';
+import { deleteJewelries } from './controllers/deleteJewelriesById.js';
+import { putJewelries } from './controllers/putJewelries.js';
+import { getJewelriesById } from './controllers/jewelriesById.js';
 
 const app = express();
 app.use(express.json())
@@ -122,162 +128,27 @@ const JEWELLERY =[
     }
 ]
 
-app.get('/health',(req,res)=>{
-    res.json({
-        success: true,
-        message: 'Server is Running'
-    })
-})
+
+app.get('/health', getHealth)
+
+
 //fetch data
-app.get('/jewelries',(req,res)=>{
-     res.json({
-        success: true,
-        message: 'Jewelleries fetched successfully',
-        data: JEWELLERY
-     })
-})
+app.get('/jewelries',getJewelries)
 
 //ADD jewelrie
-app.post('/jewelries',(req,res)=>{
-    const {id , name, type, Metalused ,Weight, Color, Price, Status , image} = req.body;
-
-    const jewelery = {
-        id ,
-        name, 
-        type,
-        Metalused ,
-        Weight, 
-        Color,
-        Price,
-        Status , 
-        image
-    };
-    if(!id){
-        return res.status(400).json({
-            success: false,
-            message: 'Id is required'
-        })
-    }
-    
-    JEWELLERY.push(jewelery);
-
-    res.status(201).json({
-        success: true,
-        message: 'Jewelery added successfully',
-        data: jewelery
-    })
-    
-})
+app.post('/jewelries', postJewelries)
 
 //DELETE jewellery
-app.delete('/jewelries/:id',(req, res)=>{
-    const {id} = req.params;
-    let jewelrieIndex = -1
-
-    JEWELLERY.map((jewelrie, index) => {
-        if (jewelrie.id == id) {
-            jewelrieIndex = index;
-        }
-    });
-
-
-    if (jewelrieIndex == -1) {
-        return res.status(404).json({
-            success: "false",
-            message: "Jewelrie not found"
-        });
-    }
-
-    JEWELLERY.splice(jewelrieIndex, 1);
-    res.json({
-        success: "true",
-        message: "Jewelrie deleted successfully"
-    });
-
-
-
-   
-
-
-})
+app.delete('/jewelries/:id', deleteJewelries)
 
 //update using put method (complete update)
-app.put('/jewelries/:id',(req, res)=>{
-    const {id} = req.params;
-    const { name, type, Metalused ,Weight, Color, Price, Status , image} = req.body;
-    let jewelrieIndex = -1
-
-    JEWELLERY.map((jewelrie, index) => {
-        if (jewelrie.id == id) {
-            jewelrieIndex = index;
-        }
-    });
-
-    
-    if (jewelrieIndex == -1) {
-        return res.status(404).json({
-            success: "false",
-            message: "Jewelrie not found"
-        });
-    }
-
-    const jewelrie = {
-        id,
-        name, 
-        type, 
-        Metalused ,
-        Weight, 
-        Color, 
-        Price, 
-        Status , 
-        image
-    }
-
-    JEWELLERY[jewelrieIndex] = jewelrie;
-    res.json({
-        success: "true",
-        message: "Jewelrie updated successfully",
-        data: jewelrie
-    })
-
-})
+app.put('/jewelries/:id', putJewelries)
  
 // reading specific jwellery
-app.get('/jewelries/:id',(req, res)=>{
-    const {id} = req.params;
-    let jewelrieIndex = -1
+app.get('/jewelries/:id', getJewelriesById)
 
-    JEWELLERY.map((jewelrie, index) => {
-        if (jewelrie.id == id) {
-            jewelrieIndex = index;
-        }
-    });
 
-    
-    if (jewelrieIndex == -1) {
-        return res.status(404).json({
-            success: "false",
-            message: "Jewelrie not found"
-        });
-    }
-
-    const jewelrie = JEWELLERY[jewelrieIndex]
-
-    
-    res.json({
-        success: "true",
-        message: "Jewelrie details fetched successfully",
-        data: jewelrie
-    })
-
-})
-app.get('*',(req,res)=>{
-    res.json({
-        success: false,
-        message: 'Invalid API'
-    })
-
-})
+app.get('*', getNotFound)
 
  const PORT = process.env.PORT;
 app.listen(PORT, ()=>{
